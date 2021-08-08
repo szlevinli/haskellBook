@@ -196,3 +196,11 @@ mult1 = x * y
     x = 5
     y = 6
 ```
+
+## String
+
+Complementary function:
+
+- `head` and `tail`
+- `take` and `drop`
+- `!!`
