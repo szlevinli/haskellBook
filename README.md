@@ -4,7 +4,7 @@
 
 > *First Principle* 是基本原理的意思
 
-## All You Need is Lambda
+## Chapter 1: All You Need is Lambda
 
 *Lambda calculus* 是一种计算模型. 这里的 *calculus* 可以翻译为"演算".
 
@@ -139,7 +139,7 @@ A combinator is a lambda term with no free variable.
 - All functions take one argument and return on result.
 - Functions are a mapping of a set of inputs to a set of outputs. Given the same value, they always return the same result.
 
-## Hello Haskell
+## Chapter 2: Hello Haskell
 
 ### Arithmetic function in Haskell
 
@@ -197,10 +197,21 @@ mult1 = x * y
     y = 6
 ```
 
-## String
+## Chapter 3: String
 
 Complementary function:
 
 - `head` and `tail`
 - `take` and `drop`
 - `!!`
+
+## Chapter 4: Basic DataTypes
+
+- Bool
+- Char
+- Int
+- Integer
+- Float
+- Double
+- Rational
+- Scientific
