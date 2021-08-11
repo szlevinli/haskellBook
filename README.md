@@ -215,3 +215,27 @@ Complementary function:
 - Double
 - Rational
 - Scientific
+
+## Chapter 5: Types
+
+### Sectioning
+
+The term *sectioning* specifically refers to partial application of infix operators, which has a special syntax and allow you to chose whether the argument you're partially applying the operator to is the first or second argument:
+
+```haskell
+-- in GHCi
+let x = 5
+let y = (2^)
+let z = (^2)
+
+y x -- 2 ^ 5 return 32
+z x -- 5 ^ 2 return 25
+```
+
+### Polymorphism
+
+Broadly speaking, type signatures may have three kinds of types:
+
+- **concrete**: Int, Bool
+- **parametrically polymorphism**: a, b
+- **constrained polymorphism**: Num a, Ord b
