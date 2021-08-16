@@ -1,3 +1,11 @@
 {
-  "words": ["rightarrow", "combinator", "combinators", "mult", "concat"]
+  "words": [
+    "rightarrow",
+    "combinator",
+    "combinators",
+    "mult",
+    "concat",
+    "newtype",
+    "typeclass"
+  ]
 }

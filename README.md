@@ -239,3 +239,141 @@ Broadly speaking, type signatures may have three kinds of types:
 - **concrete**: Int, Bool
 - **parametrically polymorphism**: a, b
 - **constrained polymorphism**: Num a, Ord b
+
+## Chapter 6: TypeClass
+
+### Writing TypeClass instances
+
+- Datatype is sum type
+
+```haskell
+-- defined datatype
+data DayOfWeek = Mon | Tue | Weds | Thu | Fri | Sat | Sun
+
+-- implement Eq
+instance Eq DayOfWeek where
+  Mon == Mon = True
+  Tue == Tue = True
+  Weds == Weds = True
+  Thu == Thu = True
+  Fri == Fri = True
+  Sat == Sat = True
+  Sun == Sun = True
+  _ == _ = False
+```
+
+- Datatype for data constructor with arguments
+
+```haskell
+-- defined datatype
+data Date = Date DayOfWeek Int
+
+-- implement Eq
+instance Eq Date where
+  (Date weekday dayOfMonth) == (Date weekday' dayOfMonth') =
+    weekday == weekday' && dayOfMonth == dayOfMonth'
+```
+
+- Datatype with polymorphic parameters
+
+```haskell
+-- defined datatype
+newtype Identity a = Identity a
+
+-- implement Eq
+instance Eq a => Eq (Identity a) where
+  (==) (Identity v) (Identity v') = v == v'
+```
+
+> Difference between `data` and `newtype` see [stack overflow](https://stackoverflow.com/questions/5889696/difference-between-data-and-newtype-in-haskell)
+
+### Instances are dispatched by type
+
+Typeclass are dispatched by type.
+
+Typeclass are defined by the set of operations and values all instances will provide.
+
+Typeclass *instances* are unique pairing of the typeClass and a type.
+
+- a typeclass defines a set of functions and/or values;
+- types have instances of that typeclass;
+- the instances specify the ways that type use the functions of the typeclass.
+
+### 关于 override
+
+在 Haskell 表述, 不存在子类改写父类的情况, 那么 Haskell 是如何处理 override 这种情况呢?
+
+下面的测试代码说明了这一点. 源代码在 *Chapter6/overrideTypeclass.hs* 文件中
+
+```haskell
+class Ord a => MyOrd a where
+  compare :: a -> a -> Int
+
+newtype Age = Age Int deriving (Show)
+
+instance Eq Age where
+  (==) (Age n) (Age n') = n == n'
+
+instance Ord Age where
+  compare (Age n) (Age n')
+    | n == n' = EQ
+    | n > n' = GT
+    | otherwise = LT
+
+instance MyOrd Age where
+  compare (Age n) (Age n')
+    | n == n' = 0
+    | n > n' = 1
+    | otherwise = -1
+```
+
+在 GHCi 中执行 `compare (Age 1) (Age 2)` 会返回如下错误信息
+
+```haskell
+<interactive>:101:1: error:
+    Ambiguous occurrence ‘compare’
+    It could refer to
+       either ‘Prelude.compare’,
+              imported from ‘Prelude’ at src/Chapter6/doNotWrite.hs:1:1
+              (and originally defined in ‘GHC.Classes’)
+           or ‘Main.compare’, defined at src/Chapter6/doNotWrite.hs:28:3
+```
+
+发生了歧义错误, 因此我们需要如下调用 `compare`
+
+```haskell
+Prelude.compare (Age 1) (Age 2) -- output: Lt
+Main.compare (Age 1) (Age 2) -- output: -1
+```
+
+## Definitions
+
+- **Typeclass inheritance** is when a typeclass has a superclass. This is a way of expressing that a typeclass requires *another* typeclass to be available for a given type before you can write an instance.
+
+  ```haskell
+  class Num a => Fractional a where
+    (/) :: a -> a -> a
+    recip :: a -> a
+    fromRational :: Rational -> a
+  ```
+
+  Here the typeclass `Fractional` *inherits* from `Num`. We could also say that `Num` is a *superclass* of `Fractional`. The long and short of it is that if you want to write an instance of `Fractional` for some $a$, must already have an instance of `Num` before you may do so.
+
+  ```haskell
+  newtype Nada = Nada Double deriving (Eq, Show)
+
+  instance Fractional Nada where
+    (/) (Nada x) (Nada y) = Nada (x / y)
+    recip (Nada n) = Nada (recip n)
+    fromRational r = Nada (fromRational r)
+  ```
+
+  Then if you try to load it:
+
+  ```text
+  • No instance for (Num Nada)
+      arising from the superclasses of an instance declaration
+  • In the instance declaration for ‘Fractional Nada’
+  ```
+
+  You need a `Num` instance first. Can't write one that makes sense? Then you're not allowed to have a `Fractional` instance either. Them is the rules.
