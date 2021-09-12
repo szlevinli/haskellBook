@@ -6,6 +6,10 @@
     "mult",
     "concat",
     "newtype",
-    "typeclass"
+    "typeclass",
+    "pointfree",
+    "foldr",
+    "nullary",
+    "uncurry"
   ]
 }
