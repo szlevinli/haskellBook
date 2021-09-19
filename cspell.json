@@ -10,6 +10,8 @@
     "pointfree",
     "foldr",
     "nullary",
-    "uncurry"
+    "uncurry",
+    "recip",
+    "Nada"
   ]
 }
