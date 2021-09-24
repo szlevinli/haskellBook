@@ -12,6 +12,8 @@
     "nullary",
     "uncurry",
     "recip",
-    "Nada"
+    "Nada",
+    "typeclasses",
+    "succ"
   ]
 }
