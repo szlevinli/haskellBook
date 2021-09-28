@@ -15,6 +15,7 @@
     "Nada",
     "typeclasses",
     "succ",
-    "nonstrict"
+    "nonstrict",
+    "WHNF"
   ]
 }
