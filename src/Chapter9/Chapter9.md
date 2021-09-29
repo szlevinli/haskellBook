@@ -225,3 +225,43 @@ sum (enumFromTo 1 10)
 ```
 
 ## 9.9 Transforming Lists of Values
+
+```haskell
+map :: (a -> b) -> [a] -> [b]
+
+fmap :: Functor f => (a -> b) -> f a -> f b
+```
+
+这里需要注意 `map` 函数的 reduce 方法是 non-strict 的, 见下
+
+```haskell
+map (+1) [1, 2, 3]
+-- de-sugared, (:) is infix-r 5,
+-- so it's right-associative
+map (+1) (1 : (2 : (3 : [])))
+
+-- Apply (+1)
+(+1) 1 :
+  ((+1) 2 :
+    ((+1) 3 :
+      ((+1) [])))
+
+-- Now we reduce, non-strict
+2 : ((+1) 2 : ((+1) 3 : []))
+2 : 3 : (+1) 3 : []
+2 : 3 : 4 : [] -- == [2, 3, 4]
+```
+
+Using the spine syntax:
+
+```text
+       :
+      / \
+(+1) 1   :
+        / \
+  (+1) 2   :
+          / \
+    (+1) 3  []
+```
+
+### 9.10 Filtering Lists of Values

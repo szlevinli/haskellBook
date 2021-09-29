@@ -16,6 +16,7 @@
     "typeclasses",
     "succ",
     "nonstrict",
-    "WHNF"
+    "WHNF",
+    "fmap"
   ]
 }
