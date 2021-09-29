@@ -264,4 +264,60 @@ Using the spine syntax:
     (+1) 3  []
 ```
 
-### 9.10 Filtering Lists of Values
+## 9.10 Filtering Lists of Values
+
+```haskell
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ [] = []
+filter pred (x : xs)
+  | pred x = x : filter pred xs
+  | otherwise = filter pred xs
+```
+
+## 9.11 Zipping Lists
+
+Zipping lists together is a means of combining values from multiple lists into a single list.
+
+```haskell
+zip :: [a] -> [b] -> [(a, b)]
+```
+
+One thing to note is that `zip` stops as soon as one of the lists runs out of values:
+
+```haskell
+Prelude> zip [1, 2] [4, 5, 6]
+[(1, 4), (2, 5)]
+
+Prelude> zip ['a'] [1..]
+[('a', 1)]
+```
+
+We can use `unzip` to recover the lists as they were before they were zipped:
+
+```haskell
+Prelude> zip [1, 2, 3] [4, 5, 6]
+[(1,4),(2,5),(3,6)]
+
+Prelude> unzip $ zip [1, 2, 3] [4, 5, 6]
+([1,2,3],[4,5,6])
+
+Prelude> fst $ unzip $ zip [1, 2, 3] [4, 5, 6]
+[1,2,3]
+
+Prelude> snd $ unzip $ zip [1, 2, 3] [4, 5, 6]
+[4,5,6]
+```
+
+We can also use `zipWith` to apply a function to the values of two lists in parallel:
+
+```haskell
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+```
+
+```haskell
+Prelude> zipWith (+) [1, 2, 3] [4, 5, 6]
+[5,7,9]
+
+Prelude> zipWith (==) ['a'..'f'] ['a'..'m']
+[True,True,True,True,True,True]
+```
