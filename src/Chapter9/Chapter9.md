@@ -23,6 +23,29 @@ data [] a = [] | a : [a]
 1 : 2 : 3 : []
 ```
 
+### Cons
+
+*Cons* is ordinarily used as a verb to signify that a list value has been created by cons'ing a value onto the head of another list value.
+
+> *Cons* 通常用作动词, 表示通过将一个值放在另一个列表的头部来创建一个新的列表.
+
+### Cons cell
+
+*Cons cell* is a data constructor and a product of the types `a` and `[a]` as defined in the list datatype.
+
+```haskell
+data [] a = [] | a : [a]
+--                 ^ cons operator
+
+-- Defining it ourselves
+data List a = Nil | Cons a (List a)
+
+-- Creating a list using our list type
+Cons 1 (Cons 2 (Cons 3 (Cons Nil)))
+```
+
+在上面的例子中, 我们将 Haskell 的列表定义换成 type constructor's List 的定义, 就能很方便的理解了, `Cons a (List a)` 这个 data constructor 中引用了 type constructor's List, 这种定义方式隐含的就是一个递归, 这在最后一个例子中可以清晰的看出.
+
 ## 9.3 Pattern Matching on Lists
 
 ```haskell
