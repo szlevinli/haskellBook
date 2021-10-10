@@ -9,6 +9,7 @@
     "typeclass",
     "pointfree",
     "foldr",
+    "foldl",
     "nullary",
     "uncurry",
     "recip",
@@ -17,6 +18,12 @@
     "succ",
     "nonstrict",
     "WHNF",
-    "fmap"
+    "fmap",
+    "catamorphism",
+    "catamorphisms",
+    "morphism",
+    "cata",
+    "scanr",
+    "scanl"
   ]
 }
