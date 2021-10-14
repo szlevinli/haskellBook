@@ -24,6 +24,9 @@
     "morphism",
     "cata",
     "scanr",
-    "scanl"
+    "scanl",
+    "datatypes",
+    "arity",
+    "arities"
   ]
 }
