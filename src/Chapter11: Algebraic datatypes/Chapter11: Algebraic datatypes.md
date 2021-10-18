@@ -248,13 +248,16 @@ class TooMany a where
 instance TooMany Int where
   tooMany n = n > 42
 
-newtype Goats =
-  Goats Int deriving (Eq, Show, TooMany)
-
--- 在此之前, 必须这么写. 等于需要定义两边一样的 tooMany 函数
+-- 在此之前, 必须这么写. 等于需要定义两遍一样的 tooMany 函数
 --
 -- newtype Goats = Goats Int deriving (Eq, Show)
 --
 -- instance TooMany Goats where
 --   tooMany (Goats n) = tooMany n
+-- 
+-- 现在我们可以直接使用 deriving 来避免再写一次相同的逻辑
+-- 同时为了告知编译器我们的做法, 需要通过 pragma, 也就是在文件头设置编译器指令, 如下
+-- {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+newtype Goats =
+  Goats Int deriving (Eq, Show, TooMany)
 ```

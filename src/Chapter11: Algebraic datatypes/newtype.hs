@@ -13,3 +13,6 @@ instance TooMany (Int, String) where
 
 instance TooMany (Int, Int) where
   tooMany (n, m) = tooMany (n + m)
+
+instance (Num a, TooMany a) => TooMany (a, a) where
+  tooMany (n, m) = tooMany n && tooMany m
