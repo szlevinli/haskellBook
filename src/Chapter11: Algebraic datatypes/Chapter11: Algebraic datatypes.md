@@ -261,3 +261,44 @@ instance TooMany Int where
 newtype Goats =
   Goats Int deriving (Eq, Show, TooMany)
 ```
+
+## 11.10 Sum types
+
+```haskell
+import Data.Int (Int8)
+
+data NumberOrBool
+  = NumNum Int8
+  | BoolBool Bool
+  deriving (Eq, Show)
+```
+
+上面的 `NumberOrBool` 是 sum types, 它的基 (cardinality) 是 258 (Int8=256, Bool=2).
+
+## 11.11 Product types
+
+Any data constructor with two or more type arguments is a product.
+
+### Record syntax
+
+```haskell
+data Person = Person
+  { name :: String,
+    age :: Int
+  }
+  deriving (Eq, Show)
+
+*Main> let levin = Person "levin" 18
+*Main> levin
+Person {name = "levin", age = 18}
+*Main> name levin
+"levin"
+*Main> age levin
+18
+*Main> :t name
+name :: Person -> String
+*Main> :t age
+age :: Person -> Int
+```
+
+## 11.12 Normal form
