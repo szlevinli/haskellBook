@@ -1,6 +1,6 @@
 # Chapter 2: Hello Haskell
 
-## Arithmetic function in Haskell
+## 2.8 Arithmetic function in Haskell
 
 `div`, `mod`, `quot` and `rem` 的区别, 可以通过下面的公式理解
 
@@ -20,7 +20,16 @@
 
 `mod (-9) 7` 返回 `5`, 而 `rem (-9) 7` 返回 `-2`.
 
-## Let and Where
+## 2.9 Parenthesization
+
+### Parenthesizing infix operators
+
+```haskell
+Prelude> :t (subtract 1)
+(subtract 1) :: Num a => a -> a
+```
+
+## 2.10 Let and Where
 
 - `let` introduces an *expression*
 - `where` is a *declaration*
