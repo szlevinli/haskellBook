@@ -302,3 +302,90 @@ age :: Person -> Int
 ```
 
 ## 11.12 Normal form
+
+这章节想说的是隐藏在 Algebraic datatypes 背后的代数 (数学).
+
+当然最终目的还是要阐明数据类型的基(cardinality), 理解它的计算方式, 从而得到其规模.
+
+用数学的乘法分配律来说明什么是"sum of products"(乘积和), 以及什么是"in normal form".
+
+```test
+2 * (3 + 4)
+根据乘法分配律可以写为
+2 * 3 + 2 * 4
+```
+
+如果将上述表达式中数字视为基数集合的表示, 那么乘积和表达式就是标准形式(in normal form), 因为不需要执行计算了.
+
+```haskell
+data Fiction = Fiction deriving (Show)
+
+data NonFiction = NonFiction deriving (Show)
+
+data BookType
+  = FictionBook Fiction
+  | NonFictionBook NonFiction
+  deriving (Show)
+
+type AuthorName = String
+
+newtype Author = Author (AuthorName, BookType)
+```
+
+上面的代码只为了说明 `Author` 这个类型所采用的定义方式不是 in normal form.
+
+下面采用 in normal form 方式来定义 `Author`.
+
+```haskell
+type AuthorName = String
+
+data Author
+  = Fiction AuthorName
+  | Nonfiction AuthorName
+  deriving (Eq, Show)
+```
+
+如果我们从 `a * (b + c)` 的角度来看, `BookType` 就好比是其中的 `b` 和 `c`, 最后定义的 `Author` 类型就仿佛使用乘法分配律将 `a * (b + c)` 改为 `a * b + a * c`. (这里对于 `a` 来讲代表了两个不同的值: `Fiction` 和`Nonfiction`, 我们可以认为他们都是 `Author` 的数据构造器就好理解了)
+
+```haskell
+data Expr
+  = Number Int
+  | Add Expr Expr
+  | Minus Expr
+  | Mult Expr Expr
+  | Divide Expr Expr
+```
+
+上面的 `Expr` 也是标准形式(in normal form), 它的 sum of product: (Number Int) + Add (Expr Expr) + Minus Expr + ...
+
+将下面的 `Garden` 定义改为 in normal form:
+
+```haskell
+data FlowerType
+  = Gardenia
+  | Daisy
+  | Rose
+  | Lilac
+  deriving (Show)
+
+type Gardener = String
+
+data Garden
+  = Garden Gardener FlowerType
+  deriving (Show)
+```
+
+The sum of products normal form of `Garden`:
+
+```haskell
+data Garden'
+  = Gardenia' Gardener
+  | Daisy' Gardener
+  | Rose' Garden
+  | Lilac' Garden
+  deriving (Show)
+```
+
+## 11.13 Constructing and deconstructing values
+
+我们用一个 value 可以做两件事: 我们可以创建或构造一个 value, 或者可以 match 它和 consume 它.
