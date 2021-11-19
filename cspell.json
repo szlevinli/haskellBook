@@ -1,5 +1,6 @@
 {
   "words": [
+    "Agda",
     "arities",
     "arity",
     "cata",
@@ -12,6 +13,8 @@
     "fmap",
     "foldl",
     "foldr",
+    "Idris",
+    "kinded",
     "morphism",
     "mult",
     "Nada",

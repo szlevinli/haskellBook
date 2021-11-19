@@ -389,3 +389,384 @@ data Garden'
 ## 11.13 Constructing and deconstructing values
 
 我们用一个 value 可以做两件事: 我们可以创建或构造一个 value, 或者可以 match 它和 consume 它.
+
+### Sum and Product
+
+下面代码用到的部分类型定义在 [constructingDeconstructingValue.hs](./constructingDeconstructingValue.hs).
+
+下面的代码开始比较绕了, 需要一点点的仔细剖开来理解
+
+```haskell
+Prelude> let bess' = CowInfo "Bess" 4
+Prelude> let bess = First bess' :: Animal'
+```
+
+上面这段代码中, `let bess = First bess' :: Animal'` 为什么可以将 `First bess'` 的类型可以设置为 `Animal'` 呢?
+
+首先我们先来看看 `First bess'`, `First` 是 type `Sum` 的一个数据构造器, 也就是说它构造了一个类型是 `Sum` 的数据, 也就是说 `First bess'` 的类型是 `(First bess') :: Sum CowInfo b`.
+
+现在的问题转换为, `Sum` 类型为什么可以设置为 `Animal'` 类型? 原来 `Animal'` 是 `Sum CowInfo b` 的类型别名: `type Animal' = Sum CowInfo (Sum PigInfo SheepInfo)`
+
+再来, 下面的代码更加绕
+
+```haskell
+Prelude> let e' = Second (SheepInfo "Elmer" 5 5)
+Prelude> let e = Second e' :: Animal'
+```
+
+```haskell
+Prelude> :t e'
+e' :: Sum a SheepInfo
+Prelude> :t Second e'
+Second e' :: Sum a1 (Sum a2 SheepInfo)
+```
+
+`Sum a1 (Sum a2 SheepInfo)` 满足 `Animal'` 的类型定义, 所以可以 `Second e' :: Animal'`
+
+下面的代码将报错
+
+```haskell
+Prelude> let elmo' = Second (SheepInfo "Elmo" 5 5)
+Prelude> let elmo = First elmo' :: Animal'
+
+<interactive>:44:12: error:
+    • Couldn't match type ‘Sum a0 SheepInfo’ with ‘CowInfo’
+      Expected type: Animal'
+        Actual type: Sum (Sum a0 SheepInfo) (Sum PigInfo SheepInfo)
+    • In the expression: First elmo' :: Animal'
+      In an equation for ‘elmo’: elmo = First elmo' :: Animal'
+```
+
+这是因为 `elmo'` 的类型是 `Sum a SheepInfo`, 而 `First elmo'` 的类型是 `Sum (Sum a SheepInfo) b`, 这与 `Animal'` 的类型 `Sum CowInfo (Sum PigInfo SheepInfo)` 不符.
+
+总结: 总体来说在 Haskell 代码中我们并不会使用诸如 `Sum` 和 `Product` 来构建 sum types 或 product types (而是直接使用 `|`, 多参数, tuple, record structure). 但是对 sum 和 product 类型的结构行程一种直觉是很有帮助的.
+
+### Constructing values
+
+这一章节中值得关注的是 record syntax
+
+```haskell
+data RecordProduct a b = RecordProduct
+  { pFirst :: a,
+    pSecond :: b
+  }
+  deriving (Eq, Show)
+```
+
+上面的代码实际定义了 1 个类型构造器, 3 个数据构造器
+
+- 类型构造器
+  - `RecordProduct`
+
+    ```haskell
+    Prelude> :i RecordProduct 
+    type RecordProduct :: * -> * -> *
+    data RecordProduct a b = RecordProduct {pFirst :: a, pSecond :: b}
+            -- Defined at constructingDeconstructingValue.hs:20:1
+    instance [safe] (Show a, Show b) => Show (RecordProduct a b)
+      -- Defined at constructingDeconstructingValue.hs:24:17
+    instance [safe] (Eq a, Eq b) => Eq (RecordProduct a b)
+      -- Defined at constructingDeconstructingValue.hs:24:13
+    ````
+
+- 数据构造器
+  - `RecordProduct`
+
+    ```haskell
+    Prelude> :t RecordProduct 
+    RecordProduct :: a -> b -> RecordProduct a b
+    ```
+
+  - `pFirst`
+
+    ```haskell
+    Prelude> :t pFirst
+    pFirst :: RecordProduct a b -> a
+    ```
+  
+  - `pSecond`
+
+    ```haskell
+    Prelude> :t pSecond
+    pSecond :: RecordProduct a b -> b
+    ```
+
+我们有两种方法构造它
+
+- `let myRecord = RecordProduct 42 0.01`
+- `let myRecord = RecordProduct {pFirst = 42, pSecond = 0.01}`
+
+我们可以使用如下方法从 `RecordProduct a b` 中分别提取 `a` 和 `b`
+
+- 提取 `a`
+
+  ```haskell
+  Prelude> pFirst myRecord
+  42
+  ```
+
+- 提取 `b`
+
+  ```haskell
+  Prelude> pSecond myRecord 
+  1.0e-2
+  ```
+
+### Deconstructing values
+
+下面是使用 Record 定义的类型和传统类型定义在 pattern matching 中的对比
+
+- 传统方式
+
+  ```haskell
+  -- FarmerType is Sum
+  data FarmerType
+    = DairyFarmer
+    | WheatFarmer
+    | SoybeanFarmer
+    deriving (Eq, Show)
+
+  -- Farmer is a plain ole product of
+  -- Name, Acres, and FarmerType
+  data Farmer
+    = Farmer Name Acres FarmerType
+    deriving (Show)
+
+  isDairyFarmer :: Farmer -> Bool
+  isDairyFarmer (Farmer _ _ DairyFarmer) = True
+  isDairyFarmer _ = False
+  ```
+
+- Record 定义
+
+  ```haskell
+  -- FarmerType is Sum
+  data FarmerType
+    = DairyFarmer
+    | WheatFarmer
+    | SoybeanFarmer
+    deriving (Eq, Show)
+
+  -- FarmerRec is Record
+  data FarmerRec = FarmerRec
+    { name :: Name,
+      acres :: Acres,
+      farmerType :: FarmerType
+    }
+    deriving (Show)
+
+  isDairyFarmerRec :: FarmerRec -> Bool
+  isDairyFarmerRec farmer =
+    case farmerType farmer of
+      DairyFarmer -> True
+      _ -> False
+  ```
+
+### Accidental bottoms from records
+
+使用 Record 时的一些忠告.
+
+**不要这么做:**
+
+```haskell
+data Automobile
+  = Null
+  | Car
+    { make :: String,
+      model :: String,
+      year :: Integer
+    }
+  deriving (Eq, Show)
+```
+
+当执行如下命令时, 系统会报错
+
+```haskell
+Prelude> make Null
+"*** Exception: No match in record selector make
+```
+
+修正方式: Record 不要用在 Sum 结构中, 而是应该将其从 Sum 结构中剥离出来
+
+```haskell
+data Car = Car
+  { make :: String,
+    model :: String,
+    year :: Integer
+  }
+  deriving (Eq, Show)
+
+data Automobile
+  = Null
+  | Automobile Car
+  deriving (Eq, Show)
+
+-- Don't usage
+data Automobile'
+  = Null'
+  | Car'
+      { make' :: String,
+        model' :: String,
+        year' :: Integer
+      }
+  deriving (Eq, Show)
+```
+
+上面例子中的 `make Null` 是什么意思? 这是 Record 语法特有的方法, Record 中的字段实际上也是函数, 可以提取值.
+
+```haskell
+car1 = Car {make = "bmw", model = "x3", year = 2021}
+
+Prelude> make car1
+"bmw"
+
+Prelude> :t make
+make :: Car -> String
+```
+
+在 data 中采用 Record 语法就会发生如下问题:
+
+```haskell
+automobile' = Car' {make' = "bmw", model' = "x3", year' = 2021}
+
+Prelude> make' Null'
+"*** Exception: No match in record selector make"
+
+Prelude> :t make'
+make' :: Automobile' -> String
+```
+
+## 11.14 Function type is exponential
+
+函数情况下计算类型所包含的数据量是以幂次方来计算的, 比如 `a -> b` 的数据量可以用 $b^a$ 的方式来计算.
+
+如果 `a` 和 `b` 都是 `Bool` 类型, 则 `a -> b` 的数据量是 $2^2$.
+
+对于 `a -> b -> c` 的数据量是 $(c^b)^a$, 也可写作 $c^{(b*a)}$
+
+下面的例子说明 Sum 结构的数据量, Product 结构的数据量, 和 函数类型的数据量
+
+```haskell
+data Quantum
+  = Yes
+  | No
+  | Both
+  deriving (Eq, Show)
+
+-- Sum: Either is Sum structuring
+--      data Either a b = Left a | Right b
+-- 3 + 3
+quantSum1 :: Either Quantum Quantum
+
+-- product
+-- 3 * 3
+quantProd1 :: (Quantum, Quantum)
+
+-- function
+-- 3 ^ 3
+quantFlip1 :: Quantum -> Quantum
+```
+
+## 11.15 Higher-kinded datatypes
+
+Kinds are the type of type constructors, primarily encoding the number of arguments they take.
+
+## 11.16 Lists are polymorphic
+
+```haskell
+data [] a = [] | a : [a]
+```
+
+我们重新定义一个 list type:
+
+```haskell
+data List a = Nil | Cons a (List a)
+```
+
+通过以下的列子来说明 `kind` 和 `type` 的相同点和不同点
+
+```haskell
+Prelude> let nil = Nil
+Prelude> :t nil
+nil :: List a
+```
+
+Type parameter 并未应用, 这是因为 `Nil` 自己也不知道其所包含的类型的具体类型, 如果我们给定具体的类型后就能看到不同了
+
+```haskell
+Prelude> let oneItem = (Cons "hello" Nil)
+Prelude> :t oneItem
+oneItem :: List [Char]
+```
+
+现在我们来看看我们定义的 `List` 的 kinded 是什么
+
+```haskell
+Prelude> :k List
+List :: * -> *
+Prelude> :k []
+[] :: * -> *
+
+Prelude> :k List Int
+List Int :: *
+Prelude> :k [Int]
+[Int] :: *
+```
+
+`kind` 是纯静态的, 只能应用于 type level, 不能用于 term level, 也就是说只对编译时有效, 运行时无效;
+
+## 11.17 Binary Tree
+
+Binary Tree 的类型定义采用 Sum 结构, 其中 `Leaf` 数据构造器类似数组结构中的 `[]`, 在整个数据结构中起到边界的作用. `Node` 数据构造器使用了递归方式.
+
+Haskell 中的这种 binary tree 数据结构与 Python 或 JS 略有不同, Haskell 采用 `Leaf`, 而 Python 或 JS 采用 `Null`. 从可读性来说, Haskell 这种方式更好些.
+
+```haskell
+data BinaryTree a
+  = Leaf
+  | Node (BinaryTree a) a (BinaryTree a)
+  deriving (Eq, Ord, Show)
+```
+
+### Inserting into trees
+
+```haskell
+insert' ::
+  Ord a =>
+  a ->
+  BinaryTree a ->
+  BinaryTree a
+insert' b Leaf = Node Leaf b Leaf
+insert' b (Node left a right)
+  | b == a = Node left a right
+  | b < a = Node (insert' b left) a right
+  | b > a = Node left a (insert' b right)
+```
+
+```haskell
+Prelude> let t0 = insert' 0 Leaf
+Prelude> let t1 = insert' 1 t0
+Prelude> let t2 = insert' 99 t1
+Prelude> let t3 = insert' 2 t2
+Prelude> let t4 = insert' 98 t3
+Prelude> let t5 = insert' 3 t4
+Prelude> let t6 = insert' 2 t5
+Prelude> t6
+Node Leaf 0 (Node Leaf 1 (Node (Node Leaf 2 (Node (Node Leaf 3 Leaf) 98 Leaf)) 99 Leaf))
+```
+
+```text
+     0
+   /   \
+ Leaf   1
+      /   \
+    Leaf  99
+          /  \
+        2  Leaf
+        / \
+    Leaf  98
+          / \
+        3   Leaf
+      /   \
+   Leaf  Leaf
+```
