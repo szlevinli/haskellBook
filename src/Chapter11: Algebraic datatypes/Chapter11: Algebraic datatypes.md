@@ -770,3 +770,22 @@ Node Leaf 0 (Node Leaf 1 (Node (Node Leaf 2 (Node (Node Leaf 3 Leaf) 98 Leaf)) 9
       /   \
    Leaf  Leaf
 ```
+
+### Fold Binary Tree
+
+下面的函数采用 foldr 方式
+
+```haskell
+foldTree ::
+  (a -> b -> b) ->
+  b ->
+  BinaryTree a ->
+  b
+foldTree _ b Leaf = b
+foldTree f b (Node left a right) =
+  -- lb: left value
+  -- nb: node value
+  let lb = foldTree f b left
+      nb = f a lb
+   in foldTree f nb right
+```
