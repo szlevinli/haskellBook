@@ -2,29 +2,25 @@ module Cipher where
 
 import Data.Char (chr, ord)
 
-lowerCaseBaseZero :: Char -> Int
-lowerCaseBaseZero = subtract 97 . ord
+-- ----------------------------------------------------------------------------
+-- 凯撒密码 Caesar Cipher
+-- 将给定的字符偏移指定的位数, 得到新的字符
+-- ----------------------------------------------------------------------------
 
-lowerCaseMod :: Int -> Int
-lowerCaseMod = flip mod 26
+type From = Int
 
-lowerCase :: Int -> Char
-lowerCase = chr . (+ 97)
+type To = Int
 
-toRight' :: Int -> Char -> Char
-toRight' i = lowerCase . lowerCaseMod . (+ i) . lowerCaseBaseZero
+type Offset = Int
 
-toRight :: Int -> Char -> Char
-toRight i c = chr $ mod (ord c - 97 + i) 26 + 97
-
-toLeft :: Int -> Char -> Char
-toLeft i c = chr $ mod (ord c - 97 - i) 26 + 97
-
-rotFromTo :: Int -> Int -> Int -> Int -> Int
+-- 在给定的范围内进行偏移(向右)操作
+-- 比如: 32-126 的范围内对给定的此范围内的数字进行偏移
+--       125 偏移 8 位得到 38
+rotFromTo :: From -> To -> Offset -> Int -> Int
 rotFromTo from to offset input =
-  (input - from + offset) `mod` (to - from) + from
+  (input - from + offset) `mod` (to - from + 1) + from
 
-rotInt :: Int -> Int -> Int
+rotInt :: Offset -> Int -> Int
 rotInt = rotFromTo 32 126
 
 rotChar :: Int -> Char -> Char
