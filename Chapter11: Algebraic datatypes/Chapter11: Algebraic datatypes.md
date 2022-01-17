@@ -76,7 +76,7 @@ Prelude> :k []
 
 `Bool` 和 `[Int]` 都是完全应用的, 有具体类型的, 因此他们的 kind 签名没有函数箭头(`->`).
 
-`[]` 的 kind 签名是 `* -> *`, 表示它仍然需要去呗应用到一个具体的类型中.
+`[]` 的 kind 签名是 `* -> *`, 表示它仍然需要应用到一个具体的类型中.
 
 ## 11.5 Data constructors and values
 
@@ -788,4 +788,24 @@ foldTree f b (Node left a right) =
   let lb = foldTree f b left
       nb = f a lb
    in foldTree f nb right
+```
+
+## Other
+
+### As-patterns
+
+*As-patterns* in Haskell are a nifty way to be able to pattern match on part of something and still refer to the entire original value. Some examples:
+
+```haskell
+f :: Show a => (a, b) -> IO (a, b)
+f t@(a, _) =
+  do
+    print a
+    return t
+```
+
+```haskell
+Prelude> f (1, 2)
+1
+(1,2)
 ```
