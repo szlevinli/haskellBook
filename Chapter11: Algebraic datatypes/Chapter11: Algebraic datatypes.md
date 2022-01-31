@@ -10,9 +10,37 @@ A type can be thought of as an enumeration of constructors that have zero or mor
 
 > 类型可以看作是具有零个或多个参数的构造器的枚举.
 
+Haskell 提供了如下的类型:
+
+- sum types
+- product types
+- product types with record syntax
+- type alias
+- newtype
+
 ## 11.2 Data declarations review
 
 When we talk about a data declaration, we are talking about the definition of the entire type.
+
+在解决问题时, 我们首先要为问题所在的领域建立模型, 然后才去考虑如何通过计算的方式来最终解决问题.
+
+```haskell
+  data Bool = False | True
+-- [1] [2] [3] [4] [5] [6]
+
+data [] a = [] | a : [a]
+--   [ 7 ]  [8]   [9]
+```
+
+1. 关键字 data 表示对数据的声明, 或对数据类型的声明
+2. type constructor (with no argument)
+3. 等号用于分隔 type constructor 和 data constructor
+4. data constructor (with no argument so is called a *nullary* constructor)
+5. 管道标识符, 说明这是一个 sum types, 也就是逻辑分离 (logical disjunction), 俗称"或"
+6. data constructor (with no argument so is called a *nullary* constructor)
+7. type constructor with an argument
+8. data constructor
+9. data constructor (:) take two arguments: an *a* and a *[a]*
 
 ## 11.3 Data and type constructors
 
