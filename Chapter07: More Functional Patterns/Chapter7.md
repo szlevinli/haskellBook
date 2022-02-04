@@ -11,7 +11,7 @@ trip = \x -> x * 3
 
 _**Pattern matching**_ is a syntactic way of deconstructing product and sum types to get at their inhabitants.
 
-> _**Pattern matching**_ *是一种语法, 用于解构 product 类型和 sum 类型, 从而可以提取它们中的"居住者".*
+> _**Pattern matching**_ _是一种语法, 用于解构 product 类型和 sum 类型, 从而可以提取它们中的"居住者"._
 
 ```haskell
 -- nullary data constructor
@@ -89,11 +89,11 @@ sumToInt (FirstPossible _) = 0
 sumToInt _ = 1
 ```
 
-*Pattern matching* is a way of matching values against pattern and, where appropriate, binding variables to successful matches.
+_Pattern matching_ is a way of matching values against pattern and, where appropriate, binding variables to successful matches.
 
-It is worth noting here that *pattern* can including things as diverse as undefined variables, numeric literals, and list syntax. As we will see, pattern matching matches on any and all data constructors.
+It is worth noting here that _pattern_ can including things as diverse as undefined variables, numeric literals, and list syntax. As we will see, pattern matching matches on any and all data constructors.
 
-Patterns are matched against values, or data constructors, *not* types.
+Patterns are matched against values, or data constructors, _not_ types.
 
 ```haskell
 isItTwo :: (Eq a, Num a) => a -> Bool
@@ -122,7 +122,7 @@ func x =
 
 ## Higher-order functions
 
-*Higher-order functions* (HOFs) are functions that accept functions as arguments or return functions as results.
+_Higher-order functions_ (HOFs) are functions that accept functions as arguments or return functions as results.
 
 ```haskell
 flip :: (a -> b -> c) -> b -> a -> c
@@ -141,7 +141,7 @@ f x
 
 Pointfree refers to a style of composing function without specifying their arguments.
 
-一种编程风格, 定义一个没有参数的函数 *f*, 该函数 *f* 返回值是一个函数.
+一种编程风格, 定义一个没有参数的函数 _f_, 该函数 _f_ 返回值是一个函数.
 
 ```haskell
 f = negate . sum
