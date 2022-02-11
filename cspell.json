@@ -1,6 +1,8 @@
 {
   "words": [
     "Agda",
+    "anamorphisms",
+    "animorphs",
     "arities",
     "arity",
     "cata",
@@ -13,12 +15,15 @@
     "fmap",
     "foldl",
     "foldr",
+    "GHCI",
     "Idris",
     "kinded",
+    "kindedness",
     "morphism",
     "mult",
     "Nada",
     "newtype",
+    "Newtypes",
     "nonstrict",
     "nullary",
     "Parenthesization",
@@ -31,6 +36,9 @@
     "typeclass",
     "typeclasses",
     "uncurry",
+    "unlifted",
+    "unwords",
+    "Vigenere",
     "WHNF"
   ]
 }

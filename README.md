@@ -75,4 +75,14 @@
 - analyze the construction of data constructors;
 - spell out when and how to write your own datatypes;
 - clarify usage of type synonyms and `newtype`;
-- introduce *kinds*.
+- introduce *kinds*;
+- As-patterns (`@` symbol).
+
+## Chapter 12: Signaling adversity
+
+这章的标题指的的应该是在 Haskell 中的错误处理机制.
+
+- `Nothing`, or `Just Maybe`;
+- `Either` left or right, but not both;
+- higher-kindedness, lifted and unlifted types;
+- anamorphisms, but not animorphs.
