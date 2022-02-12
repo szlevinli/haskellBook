@@ -67,8 +67,7 @@
 - explain what folds are and how they work;
 - detail the evaluation processes of folds;
 - walk through writing folding functions;
-- introduce scans, functions that are related to folds;
-- explain catamorphism.
+- introduce scans, functions that are related to folds.
 
 ## Chapter 11: Algebraic datatypes
 
@@ -87,3 +86,17 @@
 - `Either` left or right, but not both;
 - higher-kindedness, lifted and unlifted types;
 - anamorphisms, but not animorphs.
+
+## The term
+
+### Catamorphism
+
+Catamorphisms 的字根是 "morphism", 表示 "态射" 的意思. ("态射"是数学的一个分支称为范畴论中的一个术语). "cata-" 的意思是 "down" 或者 "against".
+
+Catamorphisms 的意思是分解数据结构 (destructing data).
+
+`fold` 就是一种 catamorphisms
+
+### Anamorphism
+
+If folds, or catamorphisms, let us break data structures down then unfolds let us build them up.
