@@ -67,7 +67,8 @@
 - explain what folds are and how they work;
 - detail the evaluation processes of folds;
 - walk through writing folding functions;
-- introduce scans, functions that are related to folds.
+- introduce scans, functions that are related to folds;
+- explain catamorphism.
 
 ## Chapter 11: Algebraic datatypes
 
