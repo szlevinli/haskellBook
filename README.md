@@ -87,6 +87,16 @@
 - higher-kindedness, lifted and unlifted types;
 - anamorphisms, but not animorphs.
 
+## Chapter 13: Building projects
+
+> Wherever there is modularity there is the potential for misunderstanding: Hiding information implies a need to check communication. -- Alan Perlis
+
+- writing Haskell programs with modules;
+- using the Cabal package manager;
+- building our project with Stack;
+- conventions around project organization;
+- building a small interactive game.
+
 ## The term
 
 ### Catamorphism
