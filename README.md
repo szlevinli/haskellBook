@@ -105,6 +105,13 @@
 - spec testing;
 - property testing;
 
+## Chapter 15: Monoid, Semigroup
+
+- Algebras!
+- Laws!
+- Monoids!
+- Semigroups!
+
 ## The term
 
 ### Catamorphism
