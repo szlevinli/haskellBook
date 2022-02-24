@@ -1,8 +1,8 @@
 # Haskell Programming from First Principles
 
-这是关于 *Haskell Programming from First Principles* 这本书的阅读笔记.
+这是关于 _Haskell Programming from First Principles_ 这本书的阅读笔记.
 
-> *First Principle* 是基本原理的意思
+> _First Principle_ 是基本原理的意思
 
 ## Chapter 1: All You Need is Lambda
 
@@ -52,7 +52,7 @@
 
 - explore what recursion is and how recursive functions evaluate;
 - go step-by-step through the process of writing recursive functions;
-- have fun with *bottom*.
+- have fun with _bottom_.
 
 ## Chapter 9: Lists
 
@@ -75,7 +75,7 @@
 - analyze the construction of data constructors;
 - spell out when and how to write your own datatypes;
 - clarify usage of type synonyms and `newtype`;
-- introduce *kinds*;
+- introduce _kinds_;
 - As-patterns (`@` symbol).
 
 ## Chapter 12: Signaling adversity
@@ -96,6 +96,14 @@
 - building our project with Stack;
 - conventions around project organization;
 - building a small interactive game.
+
+## Chapter 14: Testing
+
+- the whats and whys of testing;
+- using the testing libraries `Hspec` and `QuickCheck`;
+- a bit of fun with Morse code;
+- spec testing;
+- property testing;
 
 ## The term
 
